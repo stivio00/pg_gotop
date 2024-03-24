@@ -3,7 +3,7 @@
 Another postgresql monitoring tool.
 
 
-# Intro
+## Intro
 
 pg_gotp is a `top`/`htop` alike utility used to monitor postgresql databases.
 It opens a database connection and lists different resources like: 
@@ -12,7 +12,7 @@ current backend processes, long running transaction, IO and memory resources.
 It uses internaly the pg_catalog system tables like `pg_stats_activity` and uses system administration funcions like `pg_terminate_backend` to administrate and monitor a postgresql database.
 
 
-# Usage
+## Usage
 
 To show the options 
 ```bash
@@ -40,8 +40,12 @@ $ pg_gotop -d $db -U $user -h $host -p $port
 Enter Password:  
 ```
 
+## Screenshots
+The info panel
+![info panel](docs/screenshot1.png "Info Panel")
+ 
 
-# Dependencies
+## Dependencies
 
 * Go version 1.22
 * **tview**: https://github.com/rivo/tview : Terminal high level lib
@@ -49,7 +53,7 @@ Enter Password:
 * **pq**: https://github.com/lib/pq : Postgres driver
 
 
-# Build and test
+## Build and test
 
 For building the project:
 ```bash

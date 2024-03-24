@@ -5,11 +5,11 @@ Another postgresql monitoring tool.
 
 ## Intro
 
-pg_gotp is a `top`/`htop` alike utility used to monitor postgresql databases.
+pg_gotop is a `top`/`htop` alike utility used to monitor postgresql databases.
 It opens a database connection and lists different resources like: 
 current backend processes, long running transaction, IO and memory resources.
 
-It uses internaly the pg_catalog system tables like `pg_stats_activity` and uses system administration funcions like `pg_terminate_backend` to administrate and monitor a postgresql database.
+It uses internaly the `pg_catalog` system tables like `pg_stats_activity` and uses system administration funcions like `pg_terminate_backend` to administrate and monitor a postgresql databases.
 
 
 ## Usage
@@ -26,7 +26,7 @@ $ pg_gotop --version
 $ pg_gotop -v
 ```
 
-Running pg_gotop will prompt the password if needed to connect to database. 
+Running pg_gotop will prompt for a password if needed to be able to connect to the database. 
 
 The default values: 
 * **User**: postgres

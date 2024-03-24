@@ -47,7 +47,7 @@ func New(db *db.DbConnection) *App {
 
 	// Labels
 	helpLabel := tview.NewTextView().
-		SetText("F1-Help | F2]Activity | F3-Transactions | F4-IO | F5-Refresh | F6-Mem | F7-Disk | F8-Info")
+		SetText("F1-Help | F2-Activity | F3-Transactions | F4-IO | F5-Refresh | F6-Mem | F7-Disk | F8-Info")
 	statusLabel := tview.NewTextView().
 		SetText("Loading...")
 
@@ -160,7 +160,7 @@ func (a *App) setStatus(statusText string) {
 
 func (a App) Run() {
 	current := a.db.GetDbCurrentConnection()
-	status := fmt.Sprintf("Conected to %s as %s - %s (%s)", current.Database, current.User, current.Version, current.Size)
+	status := fmt.Sprintf("Connected to %s as %s - %s (%s)", current.Database, current.User, current.Version, current.Size)
 	a.setStatus(status)
 	if err := a.app.Run(); err != nil {
 		log.Fatal(err)

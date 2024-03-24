@@ -43,6 +43,12 @@ Enter Password:
 ## Screenshots
 The info panel
 ![info panel](docs/screenshot1.png "Info Panel")
+
+The running transactions panel
+![info panel](docs/screenshot2.png "Info Panel")
+
+The activity panel
+![info panel](docs/screenshot3.png "Info Panel")
  
 
 ## Dependencies

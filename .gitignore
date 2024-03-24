@@ -1,0 +1,7 @@
+# vscode related
+.vscode
+# binary
+bin
+pg_gotop
+# others
+.env

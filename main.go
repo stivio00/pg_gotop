@@ -31,16 +31,15 @@ func main() {
 	connStr := Options.CreateConnectionString(password)
 	db := db.New(connStr)
 
-	// TUI
 	app := ui.New(db)
 	app.BuildLayout()
 	app.Run()
-
 }
 
 func ReadPassword(promt string) string {
 	fmt.Print(promt)
 	bytePassword, err := term.ReadPassword(int(syscall.Stdin))
+	fmt.Println()
 	if err != nil {
 		log.Fatal(err)
 	}

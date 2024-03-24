@@ -44,6 +44,7 @@ Enter Password:
 # Dependencies
 
 * Go version 1.22
+* **tview**: https://github.com/rivo/tview : Terminal high level lib
 * **tcel**: https://github.com/gdamore/tcell : Terminal UI lib
 * **pq**: https://github.com/lib/pq : Postgres driver
 

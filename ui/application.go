@@ -1,12 +1,14 @@
 package ui
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 	"github.com/stivio00/pg_gotop/db"
+	"github.com/stivio00/pg_gotop/ui/pages"
 )
 
 type App struct {
@@ -38,35 +40,26 @@ const (
 
 func New(db *db.DbConnection) *App {
 	app := tview.NewApplication()
+	// Pages Container
+	pages := tview.NewPages()
+	pages.SetTitle("pg_gotop v1.0")
+	pages.SetBorder(true)
+
+	// Labels
+	helpLabel := tview.NewTextView().
+		SetText("F1-Help | F2]Activity | F3-Transactions | F4-IO | F5-Refresh | F6-Mem | F7-Disk | F8-Info")
+	statusLabel := tview.NewTextView().
+		SetText("Loading...")
 
 	// Main Layout - Flex
 	mainLayout := tview.NewFlex()
 	mainLayout.SetTitle("pg_gotop v1.0")
 	mainLayout.SetDirection(tview.FlexRow)
 
-	// Pages
-	pages := tview.NewPages()
-	pages.SetTitle("pg_gotop v1.0")
-	pages.SetBorder(true)
-
-	// Labels
-	helpLabel := tview.NewTextView().SetText("F1-Help|F2-Activity|F3-Transactions|F4-IO|F5-Refresh|F6-Mem|F7-Disk|F8-Info")
-	statusLabel := tview.NewTextView().SetText("Conected to {dbname} as {user}  dbVersion {dbversion} ")
-
 	mainLayout.AddItem(helpLabel, 1, 0, false)
 	mainLayout.AddItem(pages, 0, 100, true)
 	mainLayout.AddItem(statusLabel, 1, 0, false)
 
-	app.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
-
-		if e.Key() == tcell.KeyF10 {
-			pages.SwitchToPage("list")
-		}
-		if e.Key() == tcell.KeyF2 {
-			pages.SwitchToPage("maib")
-		}
-		return e
-	})
 	app.SetRoot(mainLayout, true).SetFocus(pages)
 
 	return &App{
@@ -80,9 +73,12 @@ func New(db *db.DbConnection) *App {
 
 func (a *App) BuildLayout() {
 
-	// Table
+	// Help page
+	help := pages.CreateHelpForm()
+	a.pages.AddPage(HelpPageId, help, true, true)
+
+	// Activity Page
 	table := tview.NewTable()
-	table.SetTitle("table")
 	table.SetBorders(true)
 
 	table.SetCell(0, 0, tview.NewTableCell("database").SetTextColor(tcell.ColorYellow).SetAlign(tview.AlignCenter))
@@ -115,18 +111,43 @@ func (a *App) BuildLayout() {
 		table.SetSelectable(false, false)
 	})
 
-	a.pages.AddPage("maib", table, true, true)
+	a.pages.AddPage(ActivityPageId, table, true, true)
 
-	// List
+	// Transaction Page
 
-	list := tview.NewList()
-	list.SetBackgroundColor(tcell.ColorDarkGreen)
-	list.SetBorder(true)
-	list.AddItem("test", "sec", 'g', func() {})
+	transactionslist := pages.CreateTransactionsPage(a.db)
+	a.pages.AddPage(TransactionPageId, transactionslist, true, false)
 
-	list.AddItem("test2", "sec3", 'u', func() {})
-	a.pages.AddPage("list", list, true, false)
+	// Info Page
+	tree := pages.CreateInfoTree(a.db)
+	a.pages.AddPage(InfoPageId, tree, true, false)
 
+	a.bindKeys()
+}
+
+func (a App) bindKeys() {
+	a.app.SetInputCapture(func(e *tcell.EventKey) *tcell.EventKey {
+		switch e.Key() {
+		case tcell.KeyF1:
+			a.pages.SwitchToPage(HelpPageId)
+		case tcell.KeyF2:
+			a.pages.SwitchToPage(ActivityPageId)
+		case tcell.KeyF3:
+			a.pages.SwitchToPage(TransactionPageId)
+		case tcell.KeyF4:
+			a.pages.SwitchToPage(IOPageId)
+		case tcell.KeyF5:
+			//Todo: Refresh
+			a.pages.SwitchToPage(HelpPageId)
+		case tcell.KeyF6:
+			a.pages.SwitchToPage(MemPageId)
+		case tcell.KeyF7:
+			a.pages.SwitchToPage(DiskPageId)
+		case tcell.KeyF8:
+			a.pages.SwitchToPage(InfoPageId)
+		}
+		return e
+	})
 }
 
 func (a App) AddPage(page Page) {
@@ -138,6 +159,9 @@ func (a *App) setStatus(statusText string) {
 }
 
 func (a App) Run() {
+	current := a.db.GetDbCurrentConnection()
+	status := fmt.Sprintf("Conected to %s as %s - %s (%s)", current.Database, current.User, current.Version, current.Size)
+	a.setStatus(status)
 	if err := a.app.Run(); err != nil {
 		log.Fatal(err)
 	}

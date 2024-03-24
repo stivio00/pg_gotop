@@ -1,13 +1,16 @@
 # PG Go Top
+
 Another postgresql monitoring tool.
 
 
 # Intro
-pg_gotp is a `top`/`htop` alike utility to monitor postgresql database.
-It opens a database conection and lists diferent resource like: 
-current backend processes, long running transaction, and IO and memory resources.
 
-It uses interanally the pg_catalog system tables like `pg_stats_activity` and uses system administration funcions like `pg_terminate_backend` to administrates a monitor a postgresql database
+pg_gotp is a `top`/`htop` alike utility used to monitor postgresql databases.
+It opens a database connection and lists different resources like: 
+current backend processes, long running transaction, IO and memory resources.
+
+It uses internaly the pg_catalog system tables like `pg_stats_activity` and uses system administration funcions like `pg_terminate_backend` to administrate and monitor a postgresql database.
+
 
 # Usage
 
@@ -34,22 +37,25 @@ The default values:
 To use a specific database connection use :
 ```bash
 $ pg_gotop -d $db -U $user -h $host -p $port
-password:  
+Enter Password:  
 ```
 
+
 # Dependencies
-* **tcel**: https://github.com/gdamore/tcell : terminal UI lib
-* **pq**: https://github.com/lib/pq : postgres driver
+
+* Go version 1.22
+* **tcel**: https://github.com/gdamore/tcell : Terminal UI lib
+* **pq**: https://github.com/lib/pq : Postgres driver
 
 
 # Build and test
 
-Build project:
+For building the project:
 ```bash
 $ go build -o bin/
 ```
 
-run
+Execute the tool with the defaults:
 ```bash
 $ bin/pg_gotop
 ```

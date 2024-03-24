@@ -10,7 +10,8 @@ import (
 
 func CreateActivityPage(db *db.DbConnection) *tview.Table {
 	table := tview.NewTable()
-	table.SetBorders(true)
+	table.SetFixed(1, 1)
+	table.SetSelectable(true, false)
 
 	table.SetCell(0, 0, tview.NewTableCell("database").SetTextColor(tcell.ColorYellow).SetAlign(tview.AlignCenter))
 	table.SetCell(0, 1, tview.NewTableCell("username").SetTextColor(tcell.ColorYellow).SetAlign(tview.AlignCenter))
@@ -30,14 +31,6 @@ func CreateActivityPage(db *db.DbConnection) *tview.Table {
 		table.SetCell(r+1, 4, tview.NewTableCell(pgActivity[r].State).SetTextColor(color).SetAlign(tview.AlignCenter))
 		table.SetCell(r+1, 5, tview.NewTableCell(pgActivity[r].BackendType).SetTextColor(color).SetAlign(tview.AlignCenter))
 	}
-	table.Select(0, 0).SetFixed(1, 1).SetDoneFunc(func(key tcell.Key) {
-		if key == tcell.KeyEnter {
-			table.SetSelectable(true, true)
-		}
-	}).SetSelectedFunc(func(row int, column int) {
-		table.GetCell(row, column).SetTextColor(tcell.ColorRed)
-		table.SetSelectable(false, false)
-	})
 
 	return table
 }
